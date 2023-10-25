@@ -67,7 +67,7 @@ Smart Money Handling (SMH) is your go-to solution for taking control of your fin
    - Contact support.
 
 **15. Logout:**
-    - Option to log out of the app.
+- Option to log out of the app.
 
 ## Mock-up Prototype
 (https://www.figma.com/file/b9jRalHmm1PNtgio0y6AiQ/SMH-Project?type=whiteboard&node-id=0%3A1&t=RtXZdxwdsolyErAL-1)
