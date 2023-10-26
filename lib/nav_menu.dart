@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_money_handling/home_screen.dart';
  class NavBar extends StatefulWidget {
    const NavBar({super.key});
 
@@ -21,7 +22,7 @@ import 'package:flutter/material.dart';
            padding: EdgeInsets.all(8.0),
            child: TabBarView(
              children: [
-               // Add your tab content here
+               HomeScreen()
              ],
            ),
          ),

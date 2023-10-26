@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'nav_menu.dart'; // Import the NavMenu if needed
+import 'user_profile_screen.dart'; // Import the UserProfileScreen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key});
@@ -7,17 +8,18 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Smart Money Handling"),
-        backgroundColor: Colors.green[900],
-      ),
       backgroundColor: Colors.lightGreen[100],
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              alignment: Alignment.topRight,
-              child: Icon(Icons.account_circle, size: 40), // User icon
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen()));
+              },
+              child: Container(
+                alignment: Alignment.topRight,
+                child: Icon(Icons.account_circle, size: 40), // User icon
+              ),
             ),
             Text(
               "Home",
