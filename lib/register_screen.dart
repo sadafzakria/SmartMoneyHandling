@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'nav_menu.dart';
+import 'login_screen.dart'; // Import the LoginScreen
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key});
@@ -21,11 +21,11 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Image.asset(
-                    'assets/images/smh.png', 
-                    height: 150, 
-                    width: 150, 
+                    'assets/images/smh.png',
+                    height: 150,
+                    width: 150,
                   ),
-                  SizedBox(height: 10), 
+                  SizedBox(height: 10),
                   Text(
                     "Sign Up",
                     style: TextStyle(
@@ -37,6 +37,15 @@ class RegisterScreen extends StatelessWidget {
               ),
             ),
             RegisterForm(),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+              child: Text(
+                "Already have an Account? LOG IN",
+                style: TextStyle(color: Colors.blue),
+              ),
+            ),
           ],
         ),
       ),
@@ -58,6 +67,7 @@ class _RegisterFormState extends State<RegisterForm> {
   String username = "";
   String password = "";
   String reenteredPassword = "";
+  bool _showPassword = false; // Toggle for showing/hiding the password
 
   @override
   Widget build(BuildContext context) {
@@ -101,33 +111,49 @@ class _RegisterFormState extends State<RegisterForm> {
               username = value!;
             },
           ),
-          TextFormField(
-            decoration: InputDecoration(labelText: '*Password'),
-            obscureText: true,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Please enter a password';
-              }
-              return null;
-            },
-            onSaved: (value) {
-              password = value!;
-            },
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  decoration: InputDecoration(labelText: '*Password'),
+                  obscureText: !_showPassword, // Toggle visibility
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a password';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    password = value!;
+                  },
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  _showPassword ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _showPassword = !_showPassword;
+                  });
+                },
+              ),
+            ],
           ),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));
+                // Navigate to the registration success screen or perform registration logic here.
               }
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green[900], 
+              primary: Colors.green[900],
             ),
             child: Text(
-              'Sign Up',
-              style: TextStyle(color: Colors.white), 
+              'Register',
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ],
