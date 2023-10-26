@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_money_handling/home_screen.dart';
+import 'package:smart_money_handling/report_and_analysis.dart';
+import 'package:smart_money_handling/transaction_report.dart';
  class NavBar extends StatefulWidget {
    const NavBar({super.key});
 
@@ -22,7 +24,11 @@ import 'package:smart_money_handling/home_screen.dart';
            padding: EdgeInsets.all(8.0),
            child: TabBarView(
              children: [
-               HomeScreen()
+               // Add your tab content here!
+               HomeScreen(),
+               TransactionReport(),
+               TransactionReport(),
+               ReportAndAnalysis(),
              ],
            ),
          ),
