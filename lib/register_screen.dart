@@ -21,11 +21,11 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Image.asset(
-                    'assets/images/smh.png', // Update this path to your image location
-                    height: 150, // Set the desired height for your logo
-                    width: 150, // Set the desired width for your logo
+                    'assets/images/smh.png', 
+                    height: 150, 
+                    width: 150, 
                   ),
-                  SizedBox(height: 10), // Add space between image and title
+                  SizedBox(height: 10), 
                   Text(
                     "Sign Up",
                     style: TextStyle(
@@ -118,17 +118,16 @@ class _RegisterFormState extends State<RegisterForm> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // Here, you can process the registration data.
-                // After successful registration, navigate to the nav_menu screen.
+                
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));
               }
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green[900], // Set the button color to green
+              primary: Colors.green[900], 
             ),
             child: Text(
               'Sign Up',
-              style: TextStyle(color: Colors.white), // Set the text color to white
+              style: TextStyle(color: Colors.white), 
             ),
           ),
         ],
