@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_money_handling/splash_screen.dart';
+import 'package:smart_money_handling/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,6 @@ class SMHapp extends StatefulWidget {
 class _SMHappState extends State<SMHapp> {
   @override
   Widget build(BuildContext context) {
-    return SplashScreen();
+    return WelcomeScreen();
   }
 }
