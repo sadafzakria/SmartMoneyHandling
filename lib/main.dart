@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:smart_money_handling/edit_user_screen.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/login_screen.dart';
 import 'package:smart_money_handling/splash_screen.dart';
-import 'package:smart_money_handling/user_profile_screen.dart';
 import 'package:smart_money_handling/welcome_screen.dart';
 import 'package:smart_money_handling/nav_menu.dart';
 import 'package:smart_money_handling/register_screen.dart';

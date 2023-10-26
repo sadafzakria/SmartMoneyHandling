@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 import 'nav_menu.dart'; // Import the NavMenu if needed
-import 'user_profile_screen.dart'; // Import the UserProfileScreen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen[100],
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen()));
-              },
-              child: Container(
-                alignment: Alignment.topRight,
-                child: Icon(Icons.account_circle, size: 40), // User icon
-              ),
+            Container(
+              alignment: Alignment.topRight,
+              child: Icon(Icons.account_circle, size: 40), // User icon
             ),
             Text(
               "Home",
@@ -87,7 +79,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 }
