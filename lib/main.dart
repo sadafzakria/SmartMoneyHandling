@@ -31,6 +31,6 @@ class SMHapp extends StatefulWidget {
 class _SMHappState extends State<SMHapp> {
   @override
   Widget build(BuildContext context) {
-    return NavBar();
+    return LoginScreen();
   }
 }
