@@ -10,16 +10,25 @@ import 'package:smart_money_handling/register_screen.dart';
 void main() {
   runApp(const MyApp());
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        //primaryColor: Colors.green[900]
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: Colors.green[900],
+            secondary: Colors.green[900]
+        ),
+      ),
       home: SMHapp(),
     );
   }
 }
+
 class SMHapp extends StatefulWidget {
   const SMHapp({super.key});
 
