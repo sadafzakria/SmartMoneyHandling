@@ -66,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               onPressed: () {}, // empty for now
               style: ElevatedButton.styleFrom(
-                primary: Colors.green[900],
+                backgroundColor: Colors.green[900],
                 minimumSize: Size(100, 35),
               ),
             ),
