@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_money_handling/finance_form.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
 import 'package:smart_money_handling/transaction_report.dart';
@@ -27,8 +28,9 @@ import 'package:smart_money_handling/transaction_report.dart';
                // Add your tab content here!
                HomeScreen(),
                TransactionReport(),
-               TransactionReport(),
+               FinanceForm(),
                ReportAndAnalysis(),
+
              ],
            ),
          ),
