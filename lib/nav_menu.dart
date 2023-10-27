@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:smart_money_handling/accounts_screen.dart';
 import 'package:smart_money_handling/finance_form.dart';
+import 'package:smart_money_handling/financial_goals_screen.dart';
 import 'package:smart_money_handling/home_screen.dart';
+import 'package:smart_money_handling/new_transaction_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
+import 'package:smart_money_handling/splash_screen.dart';
+import 'package:smart_money_handling/support_screen.dart';
 import 'package:smart_money_handling/transaction_report.dart';
+import 'package:smart_money_handling/user_profile_screen.dart';
  class NavBar extends StatefulWidget {
    const NavBar({super.key});
 
@@ -30,6 +36,8 @@ import 'package:smart_money_handling/transaction_report.dart';
                TransactionReport(),
                FinanceForm(),
                ReportAndAnalysis(),
+               SupportScreen(),
+
 
              ],
            ),

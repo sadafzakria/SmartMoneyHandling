@@ -3,9 +3,11 @@ import 'package:smart_money_handling/finance_form.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/login_screen.dart';
 import 'package:smart_money_handling/splash_screen.dart';
+import 'package:smart_money_handling/transaction_report.dart';
 import 'package:smart_money_handling/welcome_screen.dart';
 import 'package:smart_money_handling/nav_menu.dart';
 import 'package:smart_money_handling/register_screen.dart';
+import 'package:smart_money_handling/edit_user_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +41,6 @@ class SMHapp extends StatefulWidget {
 class _SMHappState extends State<SMHapp> {
   @override
   Widget build(BuildContext context) {
-    return LoginScreen();
+    return LoginScreen() ;
   }
 }
