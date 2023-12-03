@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smart_money_handling/finance_form.dart';
 import 'package:smart_money_handling/home_screen.dart';
+import 'package:smart_money_handling/logout_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
 import 'package:smart_money_handling/transaction_report.dart';
+import 'package:smart_money_handling/support_screen.dart';
+import 'package:smart_money_handling/accounts_screen.dart';
+
  class NavBar extends StatefulWidget {
    const NavBar({super.key});
 
@@ -19,6 +22,14 @@ import 'package:smart_money_handling/transaction_report.dart';
          appBar: AppBar(
            title: Text("Smart Money Handling"),
            backgroundColor: Colors.green[900],
+           actions: [
+             IconButton(
+               icon: Icon(Icons.logout, color: Colors.white, size:30),
+               onPressed: () {
+                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => LogoutScreen()));
+               },
+             ),
+           ],
          ),
          backgroundColor: Colors.lightGreen[100],
          body: Padding(
@@ -27,10 +38,10 @@ import 'package:smart_money_handling/transaction_report.dart';
              children: [
                // Add your tab content here!
                HomeScreen(),
-               TransactionReport(),
-               FinanceForm(),
                ReportAndAnalysis(),
-
+               MyAccountsScreen(),
+               TransactionReport(),
+               SupportScreen(),
              ],
            ),
          ),
@@ -56,7 +67,7 @@ import 'package:smart_money_handling/transaction_report.dart';
                Tab(
                  icon: Icon(Icons.attach_money),
                  child: Text(
-                   'Money\nReport',
+                   'Accounts',
                    style: TextStyle(fontSize: 10),
                    textAlign: TextAlign.center,
                  ),

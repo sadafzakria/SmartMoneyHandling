@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:smart_money_handling/financial_goals_screen.dart';
 
 class ReportAndAnalysis extends StatefulWidget {
   const ReportAndAnalysis({super.key});
@@ -11,7 +12,7 @@ class ReportAndAnalysis extends StatefulWidget {
 
 class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
 
-  String _report_analysis= "Generate\nReport\nAnalysis\nHere";
+  String _report_analysis= "Generate\nFinancial\nGoals\nHere";
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +94,16 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
                 ),
               ),
             ],
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => FinancialGoalsScreen()));
+          },
+          child: Text('Set New Financial Goals'),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green[900],
+            minimumSize: Size(50, 35),
           ),
         ),
       ],

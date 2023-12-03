@@ -17,14 +17,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner:false,
       theme: ThemeData(
-        //primaryColor: Colors.green[900]
         colorScheme: ColorScheme.fromSwatch().copyWith(
             primary: Colors.green[900],
             secondary: Colors.green[900]
         ),
       ),
       home: SMHapp(),
+      builder: (context, child) {
+        return GestureDetector(
+          onTap: () {
+            // Dismiss the keyboard when tapping outside of a text field
+            FocusScope.of(context).unfocus();
+          },
+          child: child,
+        );
+      },
     );
   }
 }
@@ -39,6 +48,6 @@ class SMHapp extends StatefulWidget {
 class _SMHappState extends State<SMHapp> {
   @override
   Widget build(BuildContext context) {
-    return NavBar();
+    return SplashScreen();
   }
 }

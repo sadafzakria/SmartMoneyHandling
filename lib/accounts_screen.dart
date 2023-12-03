@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smart_money_handling/home_screen.dart';
+import 'package:smart_money_handling/new_transaction_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
 import 'package:smart_money_handling/transaction_report.dart';
 
@@ -104,7 +105,9 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
               ],
             ),
             SizedBox(height: 60,),
-            IconButton(onPressed: (){}, icon: Icon(Icons.add, size: 60, color: Colors.green,))
+            IconButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewTransactionScreen()));
+            }, icon: Icon(Icons.add, size: 60, color: Colors.green,))
           ],
         ),
       ),

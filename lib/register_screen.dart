@@ -42,7 +42,7 @@ class RegisterScreen extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               child: Text(
-                "Already have an Account? LOG IN",
+                "Already have an Account? Login",
                 style: TextStyle(color: Colors.blue),
               ),
             ),

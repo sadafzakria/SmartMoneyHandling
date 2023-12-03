@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:smart_money_handling/home_screen.dart';
-import 'package:smart_money_handling/report_and_analysis.dart';
-import 'package:smart_money_handling/transaction_report.dart';
+import 'finance_form.dart';
 
 class FinancialGoalsScreen extends StatefulWidget {
   const FinancialGoalsScreen({super.key});
@@ -16,7 +13,13 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Smart Money Handling"),
+        backgroundColor: Colors.green[900],
+      ),
+      backgroundColor: Colors.lightGreen[100],
+    body: SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -157,12 +160,15 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
             ),
             SizedBox(height: 20,),
             ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => FinanceForm()));
+                },
                 child: Text('Next')
             ),
           ],
         ),
       ),
+    ),
     );
   }
 }

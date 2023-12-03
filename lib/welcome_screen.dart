@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'login_screen.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({super.key});
-
-  @override
-  State<WelcomeScreen> createState() => _WelcomeScreenState();
-}
-
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Smart Money Handling"),
-        backgroundColor: Colors.green[900],
-      ),
       backgroundColor: Colors.lightGreen[100],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Hero(
+              tag: 'logo',
+              child: Container(
+                child: Image.asset(
+                  'assets/images/smh.png',
+                  width: 250,
+                  height: 250,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               alignment: Alignment.center,
               child: Text(
@@ -28,16 +31,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: Image.asset(
-                'assets/images/smh.png',
-                width: 250,
-                height: 250,
               ),
             ),
             SizedBox(
@@ -64,7 +57,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {}, // empty for now
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green[900],
                 minimumSize: Size(100, 35),

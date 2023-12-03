@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'user_profile_screen.dart';
 import 'nav_menu.dart'; // Import the NavMenu if needed
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,12 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             Container(
               alignment: Alignment.topRight,
-              child: Icon(Icons.account_circle, size: 40), // User icon
+              child: IconButton(
+                icon: Icon(Icons.account_circle, size: 40), // User icon
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen()));
+                },
+              ),
             ),
             Text(
               "Home",
