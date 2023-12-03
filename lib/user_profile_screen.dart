@@ -15,7 +15,7 @@ class UserProfileScreen extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfileScreen()));
             },
-            child: Icon(Icons.edit, size: 40,),
+            child: Icon(Icons.edit, size: 40),
           ),
         ],
       ),
@@ -52,7 +52,8 @@ class UserProfileScreen extends StatelessWidget {
             SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                // Add delete account functionality
+                // Add delete account functionality here
+                // This is where you would implement the logic to delete the user's account
               },
               style: ElevatedButton.styleFrom(
                 primary: Colors.red,

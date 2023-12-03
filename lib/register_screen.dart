@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:smart_money_handling/home_screen.dart';
+import 'package:smart_money_handling/nav_menu.dart';
 import 'login_screen.dart'; // Import the LoginScreen
 
 class RegisterScreen extends StatelessWidget {
@@ -145,8 +147,7 @@ class _RegisterFormState extends State<RegisterForm> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // Navigate to the registration success screen or perform registration logic here.
-              }
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));              }
             },
             style: ElevatedButton.styleFrom(
               primary: Colors.green[900],
