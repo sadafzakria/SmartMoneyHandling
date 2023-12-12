@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'user.dart';
 import 'user_profile_screen.dart';
-import 'nav_menu.dart'; // Import the NavMenu if needed
+import 'nav_menu.dart';
+
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key});
+  final User user;
+
+  const HomeScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,9 @@ class HomeScreen extends StatelessWidget {
               child: IconButton(
                 icon: Icon(Icons.account_circle, size: 40), // User icon
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserProfileScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UserProfileScreen(user: user),
+                  ));
                 },
               ),
             ),
@@ -79,7 +85,7 @@ class HomeScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.green[900],
                   ),
-                  textAlign: TextAlign.center, // Align the text to the center
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

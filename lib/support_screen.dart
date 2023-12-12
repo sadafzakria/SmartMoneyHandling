@@ -32,7 +32,7 @@ class _SupportScreenState extends State<SupportScreen> {
             SizedBox(height: 30,),
             Container(
                 height: 40,
-                width: 200,
+                width: 350,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(16),
@@ -41,7 +41,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(Icons.phone),
-                    Text('Phone Number', style: TextStyle(fontSize: 20),),
+                    Text('555-555-5555', style: TextStyle(fontSize: 20),),
                     SizedBox(width: 10,),
                   ],
                 )
@@ -49,7 +49,7 @@ class _SupportScreenState extends State<SupportScreen> {
             SizedBox(height: 30,),
             Container(
                 height: 40,
-                width: 200,
+                width: 350,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(16),
@@ -58,7 +58,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(Icons.email),
-                    Text('Email', style: TextStyle(fontSize: 20),),
+                    Text('inquiries@SMHmoney@com', style: TextStyle(fontSize: 20),),
                     SizedBox(width: 10,),
                   ],
                 )

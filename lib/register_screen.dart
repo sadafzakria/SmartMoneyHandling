@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_money_handling/home_screen.dart';
-import 'package:smart_money_handling/nav_menu.dart';
-import 'login_screen.dart'; // Import the LoginScreen
+import 'login_screen.dart';
+import 'user.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key});
@@ -12,6 +12,7 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Smart Money Handling"),
         backgroundColor: Colors.green[900],
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.lightGreen[100],
       body: SingleChildScrollView(
@@ -41,7 +42,9 @@ class RegisterScreen extends StatelessWidget {
             RegisterForm(),
             TextButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
               },
               child: Text(
                 "Already have an Account? Login",
@@ -63,13 +66,52 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  final fnameController = TextEditingController();
+  final lnameController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  // GlobalKey for Form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String firstName = "";
-  String lastName = "";
-  String username = "";
-  String password = "";
-  String reenteredPassword = "";
-  bool _showPassword = false; // Toggle for showing/hiding the password
+
+  // Toggle for showing/hiding the password
+  bool _showPassword = false;
+
+  Future<bool> isUsernameUnique(String username) async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .get();
+
+      return querySnapshot.docs.isEmpty;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error checking username uniqueness: $e'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+  }
+
+  Future<void> createUser(User user) async {
+    try {
+      final docUser = FirebaseFirestore.instance.collection('users').doc();
+      user.id = docUser.id;
+      final json = user.toJson();
+      await docUser.set(json);
+      _formKey.currentState?.reset();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error creating user: $e'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +120,7 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Column(
         children: <Widget>[
           TextFormField(
+            controller: fnameController,
             decoration: InputDecoration(labelText: '*First Name'),
             validator: (value) {
               if (value!.isEmpty) {
@@ -85,11 +128,9 @@ class _RegisterFormState extends State<RegisterForm> {
               }
               return null;
             },
-            onSaved: (value) {
-              firstName = value!;
-            },
           ),
           TextFormField(
+            controller: lnameController,
             decoration: InputDecoration(labelText: '*Last Name'),
             validator: (value) {
               if (value!.isEmpty) {
@@ -97,11 +138,9 @@ class _RegisterFormState extends State<RegisterForm> {
               }
               return null;
             },
-            onSaved: (value) {
-              lastName = value!;
-            },
           ),
           TextFormField(
+            controller: usernameController,
             decoration: InputDecoration(labelText: '*Username'),
             validator: (value) {
               if (value!.isEmpty) {
@@ -109,48 +148,87 @@ class _RegisterFormState extends State<RegisterForm> {
               }
               return null;
             },
-            onSaved: (value) {
-              username = value!;
-            },
           ),
           Row(
             children: <Widget>[
               Expanded(
                 child: TextFormField(
-                  decoration: InputDecoration(labelText: '*Password'),
-                  obscureText: !_showPassword, // Toggle visibility
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                    labelText: '*Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _showPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.grey,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _showPassword = !_showPassword;
+                        });
+                      },
+                    ),
+                  ),
+                  obscureText: !_showPassword,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a password';
                     }
                     return null;
                   },
-                  onSaved: (value) {
-                    password = value!;
-                  },
                 ),
-              ),
-              IconButton(
-                icon: Icon(
-                  _showPassword ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.grey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showPassword = !_showPassword;
-                  });
-                },
               ),
             ],
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));              }
+                final username = usernameController.text;
+
+                // Check if the username is unique
+                final isUnique = await isUsernameUnique(username);
+
+                if (!isUnique) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          'Username is already taken. Please choose another.'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                  return;
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('User registration in progress...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                await createUser(
+                  User(
+                    fname: fnameController.text,
+                    lname: lnameController.text,
+                    username: username,
+                    password: passwordController.text,
+                  ),
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('User created successfully!'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              }
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green[900],
+              backgroundColor: Colors.green[900],
             ),
             child: Text(
               'Register',
@@ -162,3 +240,4 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 }
+

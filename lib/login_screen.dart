@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'user.dart';
 import 'nav_menu.dart';
-import 'register_screen.dart'; // Import the RegisterScreen
+import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key});
@@ -11,6 +13,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Smart Money Handling"),
         backgroundColor: Colors.green[900],
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.lightGreen[100],
       body: SingleChildScrollView(
@@ -22,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Image.asset(
-                    'assets/images/smh.png', // Update this path to your image location
+                    'assets/images/smh.png',
                     height: 150,
                     width: 150,
                   ),
@@ -37,7 +40,15 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            LoginForm(),
+            LoginForm(
+              onLogin: (user) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => NavBar(user: user),
+                  ),
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextButton(
@@ -61,17 +72,44 @@ class LoginScreen extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key});
+  final Function(User user) onLogin;
+
+  const LoginForm({Key? key, required this.onLogin});
 
   @override
   _LoginFormState createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
-  bool _showPassword = false; // Toggle for showing/hiding the password
+  bool _showPassword = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String username = "";
   String password = "";
+
+  Future<User?> authenticateUser(String username, String password) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .where('password', isEqualTo: password)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+        return User(
+          username: username,
+          password: password,
+          fname: userData['fname'] ?? '',
+          lname: userData['lname'] ?? '',
+        );
+      } else {
+        return null; // User not found
+      }
+    } catch (e) {
+      print('Error authenticating user: $e');
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +156,27 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // Here, you can process the login data.
-                // After successful login, navigate to the nav_menu screen.
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NavBar()));
+
+                User? user = await authenticateUser(username, password);
+
+                if (user != null) {
+                  // Pass the user details to the onLogin callback
+                  widget.onLogin(user);
+
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => NavBar(user: user)));
+                      print(user);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Invalid username or password'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
               }
             },
             style: ElevatedButton.styleFrom(

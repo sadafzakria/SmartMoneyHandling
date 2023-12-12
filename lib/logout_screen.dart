@@ -16,6 +16,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
       appBar: AppBar(
         title: Text("Smart Money Handling"),
         backgroundColor: Colors.green[900],
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.lightGreen[100],
       body: SingleChildScrollView(
