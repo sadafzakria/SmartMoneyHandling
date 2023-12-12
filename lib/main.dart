@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:smart_money_handling/finance_form.dart';
-import 'package:smart_money_handling/home_screen.dart';
-import 'package:smart_money_handling/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:smart_money_handling/splash_screen.dart';
-import 'package:smart_money_handling/welcome_screen.dart';
-import 'package:smart_money_handling/nav_menu.dart';
-import 'package:smart_money_handling/register_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+    print("Firebase initialized successfully");
+  } catch (e) {
+    print("Error initializing Firebase: $e");
+  }
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

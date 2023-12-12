@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "338899519815",
+    "project_id": "smhapp-e82c6",
+    "storage_bucket": "smhapp-e82c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338899519815:android:55cb6f7b8405dfde106462",
+        "android_client_info": {
+          "package_name": "com.example.smart_money_handling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb3Sgwt8HHeaTtRIbmbcxsLoZgiYomdXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
