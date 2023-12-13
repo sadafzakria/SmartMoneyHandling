@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'goals.dart';
 
 class User {
   String id;
@@ -6,6 +6,7 @@ class User {
   final String lname;
   final String username;
   final String password;
+  List<FinancialGoal> goals;
 
   User({
     this.id = '',
@@ -13,7 +14,9 @@ class User {
     required this.lname,
     required this.username,
     required this.password,
-  });
+    List<FinancialGoal>? goals, // Allow null for default
+  }) : goals = goals ?? [];
+  // remove goals its an attempt at incorporating outside fields into the firebase db
 
   Map<String, dynamic> toJson() => {
         'id': id,

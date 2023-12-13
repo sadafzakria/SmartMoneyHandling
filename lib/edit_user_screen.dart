@@ -85,9 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     labelText: 'Enter New Password',
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _showPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        _showPassword ? Icons.visibility : Icons.visibility_off,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -107,7 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   updateUser();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.green[900],
+                  backgroundColor: Colors.green[900],
                 ),
                 child: Text(
                   'Save',
@@ -132,11 +130,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         String newPassword = passwordController.text;
 
         // Update user in Firestore using the retrieved user ID
-        await FirebaseFirestore.instance.collection('users').doc(userId).update(
-            {
-              'username': newUsername,
-              'password': newPassword,
-            });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .update({
+          'username': newUsername,
+          'password': newPassword,
+        });
 
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,6 +145,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             duration: Duration(seconds: 2),
           ),
         );
+        // Pop the EditProfileScreen and pass the updated user information
+        Navigator.of(context).pop(new User(
+          id: widget.user.id,
+          username: newUsername,
+          password: newPassword,
+          fname: widget.user.fname,
+          lname: widget.user.lname,
+        ));
       } else {
         // Show error message if user not found
         ScaffoldMessenger.of(context).showSnackBar(

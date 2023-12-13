@@ -10,13 +10,22 @@ class FinanceForm extends StatefulWidget {
 class _FinanceFormState extends State<FinanceForm> {
   // Initial Selected Values for each question
   List<String> dropdownValues = [
-    'Strongly Agree',
-    'Strongly Agree',
-    'Strongly Agree',
-    'Strongly Agree',
-    'Strongly Agree',
-    'Strongly Agree',
-    'Strongly Agree',
+    'Strongly Agree', // 1
+    'Strongly Agree', // 2
+    'Strongly Agree', // 3
+    'Strongly Agree', // 4
+    'Strongly Agree', // 5
+    'Strongly Agree', // 6
+    'Strongly Agree', // 7
+    'Strongly Agree', // 8
+    'Strongly Agree', // 9
+    'Strongly Agree', // 10
+    'Strongly Agree', // 11
+    'Strongly Agree', // 12
+    'Strongly Agree', // 13
+    'Strongly Agree', // 14
+    'Strongly Agree', // 15
+
   ];
 
   // Likert Scale
@@ -30,13 +39,26 @@ class _FinanceFormState extends State<FinanceForm> {
 
   // List of questions
   var questions = [
-    'Question 1: How would you rate this?',
-    'Question 2: How would you rate that?',
-    'Question 3: How would you rate something else?',
-    'Question 4: How would you rate another thing?',
-    'Question 5: How would you rate yet another thing?',
-    'Question 6: How would you rate one more thing?',
-    'Question 7: How would you rate the last thing?',
+     // HOUSING
+    '1. I prioritize owning a home as part of my long-term financial goals.',
+    '2. Investing in real estate is important to me for building wealth.',
+    '3. I am willing to make sacrifices in other areas to afford a house.',
+    // LIVING EXPENSES
+    '4. Maintaining a comfortable lifestyle is a top financial priority for me.',
+    '5. I am willing to cut down on discretionary spending to save for the future.',
+    '6. I prioritize experiences over material possessions in my budget.',
+    // TRANSPORTATION
+    '7. Owning a car is essential to my lifestyle and financial goals.',
+    '8. I am open to using public transportation to reduce transportation costs.',
+    '9. I prioritize fuel-efficient and eco-friendly transportation options.',
+    // SAVINGS AND INVESTMENTS
+    '10. Building a substantial emergency fund is a key part of my financial strategy.',
+    '11. I am comfortable with moderate to high-risk investments for potential higher returns.',
+    '12. Consistently saving a percentage of my income is a financial goal for me.',
+    // DEBT MANAGEMENT
+    '13. I am comfortable taking on debt for significant purchases, like education or a home.',
+    '14. Reducing and eliminating debt is a top priority in my financial plan.',
+    '15. I am cautious about taking on new debt, even for major life expenses.',
   ];
 
   @override
@@ -67,7 +89,7 @@ class _FinanceFormState extends State<FinanceForm> {
               alignment: WrapAlignment.start,
               spacing: 10.0,
               runSpacing: 10.0,
-              children: List.generate(7, (index) {
+              children: List.generate(15, (index) {
                 return Container(
                   margin: EdgeInsets.all(10.0),
                   child: Row(
@@ -115,10 +137,10 @@ class _FinanceFormState extends State<FinanceForm> {
               onPressed: () {
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Financial Goals Updated!')));
+                      SnackBar(content: Text('Financial Chart Updated!')));
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green[900],
+                backgroundColor: Colors.green[900],
                 minimumSize: Size(100, 35),
               ),
             ),

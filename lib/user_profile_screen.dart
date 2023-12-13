@@ -4,10 +4,24 @@ import 'edit_user_screen.dart';
 import 'login_screen.dart';
 import 'user.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   final User user;
 
   const UserProfileScreen({Key? key, required this.user}) : super(key: key);
+
+  @override
+  _UserProfileScreenState createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+
+  late User user; // Define user property in the state
+
+  @override
+  void initState() {
+    super.initState();
+    user = widget.user; // Initialize user in the initState
+  }
 
   Future<String?> retrieveUserIdFromDatabase(String username) async {
     try {
@@ -37,9 +51,21 @@ class UserProfileScreen extends StatelessWidget {
         backgroundColor: Colors.green[900],
         actions: <Widget>[
           InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => EditProfileScreen(user: user)));
+            onTap: () async {
+              // Open EditProfileScreen and wait for the result
+              final updatedUser = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => EditProfileScreen(user: user),
+                ),
+              );
+
+              // Check if user information was updated
+              if (updatedUser != null && updatedUser is User) {
+                // Update the state with the new user information
+                setState(() {
+                  user = updatedUser;
+                });
+              }
             },
             child: Icon(Icons.edit, size: 40),
           ),
@@ -57,20 +83,20 @@ class UserProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              '${user.username}', // Wrap the expression with {}
+              '${user.username}',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              '${user.fname}', // Wrap the expression with {}
+              '${user.fname}',
               style: TextStyle(
                 fontSize: 22,
               ),
             ),
             Text(
-              '${user.lname}', // Wrap the expression with {}
+              '${user.lname}',
               style: TextStyle(
                 fontSize: 22,
               ),
@@ -134,7 +160,6 @@ class UserProfileScreen extends StatelessWidget {
                       }
                     } catch (e) {
                       print('Error deleting user: $e');
-                      // TODO: Handle the error, show a message, etc.
                     }
                   }
                 } else {
@@ -143,7 +168,7 @@ class UserProfileScreen extends StatelessWidget {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.red,
+                backgroundColor: Colors.red,
               ),
               child: Text(
                 'Delete Account',
