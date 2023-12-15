@@ -3,83 +3,116 @@ import 'user.dart';
 import 'user_profile_screen.dart';
 import 'nav_menu.dart';
 
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final User user;
 
   const HomeScreen({Key? key, required this.user}) : super(key: key);
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<Expense> expenses = [
+    Expense("", ""),
+    Expense("", ""),
+    Expense("", ""),
+  ];
+
+  double totalAmount = 0.0;
+  bool showTotalAmount = false;
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(Icons.account_circle, size: 40), // User icon
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UserProfileScreen(user: user),
-                  ));
-                },
+      child: Column(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: Icon(Icons.account_circle, size: 40),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserProfileScreen(user: widget.user),
+                ));
+              },
+            ),
+          ),
+          Text(
+            "Home",
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text("Current Budget Expenses", style: TextStyle(fontSize: 20)),
+          DataTable(
+            columns: <DataColumn>[
+              DataColumn(label: Text("Type")),
+              DataColumn(label: Text("Amount")),
+            ],
+            rows: expenses
+                .map(
+                  (expense) => DataRow(
+                cells: <DataCell>[
+                  DataCell(
+                    TextField(
+                      decoration: InputDecoration(hintText: "Expense Type"),
+                      controller: TextEditingController(text: expense.type),
+                      onChanged: (value) {
+                        setState(() {
+                          expense.type = value;
+                        });
+                      },
+                    ),
+                  ),
+                  DataCell(
+                    TextField(
+                      decoration: InputDecoration(hintText: "Amount"),
+                      controller: TextEditingController(text: expense.amount),
+                      onChanged: (value) {
+                        setState(() {
+                          expense.amount = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              "Home",
-              style: TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text("Current Budget Expenses", style: TextStyle(fontSize: 20)),
-            DataTable(
-              columns: <DataColumn>[
-                DataColumn(label: Text("Type")),
-                DataColumn(label: Text("Amount")),
-              ],
-              rows: <DataRow>[
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text("Expense Type 1")),
-                    DataCell(Text("Amount 1")),
-                  ],
-                ),
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text("Expense Type 2")),
-                    DataCell(Text("Amount 2")),
-                  ],
-                ),
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text("Expense Type 3")),
-                    DataCell(Text("Amount 3")),
-                  ],
-                ),
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text("Expense Type 4")),
-                    DataCell(Text("Amount 4")),
-                  ],
-                ),
-                DataRow(
-                  cells: <DataCell>[
-                    DataCell(Text("Expense Type 5")),
-                    DataCell(Text("Amount 5")),
-                  ],
-                ),
-                // Add more rows as needed
-              ],
-            ),
-            SizedBox(height: 10),
+            )
+                .toList(),
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                // Add a new expense row
+                expenses.add(Expense("", ""));
+                showTotalAmount = false; // Reset the flag when adding a new expense
+              });
+            },
+            child: Text("Add Expense"),
+          ),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                // Calculate total amount
+                totalAmount = calculateTotalAmount();
+                showTotalAmount = true; // Set the flag to show the total amount
+              });
+            },
+            child: Text("Calculate Total Expenses"),
+          ),
+          SizedBox(height: 10),
+          if (showTotalAmount)
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(16),
               color: Colors.green[100],
               child: Center(
                 child: Text(
-                  "Your efficient budgeting is catching up to you! Your savings are up by - - %",
+                  "Your efficient budgeting is catching up to you! Your Total Expenses are $totalAmount",
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
@@ -89,8 +122,27 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+        ],
+      ),
     );
   }
+
+  double calculateTotalAmount() {
+    double total = 0.0;
+    for (Expense expense in expenses) {
+      try {
+        total += double.parse(expense.amount);
+      } catch (e) {
+        // Handle parsing errors if necessary
+      }
+    }
+    return total;
+  }
+}
+
+class Expense {
+  String type;
+  String amount;
+
+  Expense(this.type, this.amount);
 }
