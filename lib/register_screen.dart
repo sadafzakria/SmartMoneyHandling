@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'user.dart';
+import 'classes/user.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key});

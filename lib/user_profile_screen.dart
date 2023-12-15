@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'edit_user_screen.dart';
 import 'login_screen.dart';
-import 'user.dart';
+import 'classes/user.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final User user;

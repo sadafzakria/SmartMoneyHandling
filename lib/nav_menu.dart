@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
+import 'classes/user.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/logout_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';

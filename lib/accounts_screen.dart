@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/new_transaction_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
+import 'package:smart_money_handling/transaction_history.dart';
 import 'package:smart_money_handling/transaction_report.dart';
 
 class MyAccountsScreen extends StatefulWidget {
@@ -38,7 +39,10 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      //Navigator.of(context)
+                          //.push(MaterialPageRoute(builder: (context) => TransactionHistory(id: id)));
+                    },
                     child: Text('View Transaction History')
                 ),
                 Container(
