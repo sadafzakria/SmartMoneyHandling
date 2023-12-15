@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'financial_goals_screen.dart';
+import 'finance_form.dart';
 
 class ReportAndAnalysis extends StatefulWidget {
   const ReportAndAnalysis({super.key});
@@ -71,6 +72,11 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
                 ),
               ),
             );
+
+            if (result != null) {
+              // Handle the result if needed
+              print('Received updated goals: $result');
+            }
           },
           child: Text('Set Your Financial Goals'),
           style: ElevatedButton.styleFrom(
@@ -79,19 +85,19 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
           ),
         ),
         ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).push(
+          onPressed: () async {
+            final result = await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => FinancialGoalsScreen(
-                  initialSelectedGoals: selectedGoals,
-                  onGoalsUpdated: (updatedGoals) {
-                    setState(() {
-                      selectedGoals = updatedGoals;
-                    });
-                  },
-                ),
+                builder: (context) => FinanceForm(),
               ),
             );
+
+            if (result != null) {
+              // Handle the result if needed
+              print('Received result from FinanceForm: $result');
+              // Trigger a rebuild of the ReportAndAnalysis widget if needed
+              setState(() {});
+            }
           },
           child: Text('Explore Your Financial Mindset'),
           style: ElevatedButton.styleFrom(
@@ -120,19 +126,55 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
       'Debt',
     ];
 
-    final List<double> goalValues = [37.9, 15.5, 4.2, 4.9, 36.9];
+    bool anyGoalSelected = selectedGoals.any((isSelected) => isSelected);
 
-    return List.generate(goalTitles.length, (index) {
+    // Check if any goal is selected, if not, return an empty list
+    if (!anyGoalSelected) {
+      return [];
+    }
+
+    // Calculate the total points for the default case (no goals selected)
+    double totalDefaultPoints = 0.0;
+
+    for (int index = 0; index < goalTitles.length; index++) {
       final isSelected = selectedGoals[index];
-      final color = isSelected ? legendColors[index] : Colors.grey;
+      if (isSelected) {
+        totalDefaultPoints += getFinanceFormPoints(goalTitles[index]);
+      }
+    }
 
-      return PieChartSectionData(
+    List<PieChartSectionData> sections = [];
+    for (int index = 0; index < goalTitles.length; index++) {
+      final color = legendColors[index];
+      double value = getFinanceFormPoints(goalTitles[index]);
+
+      // Add the section regardless of whether the corresponding goal is selected
+      sections.add(PieChartSectionData(
         color: color,
-        value: isSelected ? goalValues[index] : 0,
-        title: isSelected ? '${goalValues[index]}' : '',
+        value: value,
+        title: '$value%',
         radius: 100.0,
-      );
-    });
+      ));
+    }
+    return sections;
+  }
+
+  // Helper function to get category points from FinanceForm
+  double getFinanceFormPoints(String category) {
+    switch (category) {
+      case 'Housing':
+        return FinanceForm.housingPoints;
+      case 'Living Expenses':
+        return FinanceForm.livingExpensesPoints;
+      case 'Transportation':
+        return FinanceForm.transportationPoints;
+      case 'Savings/Investments':
+        return FinanceForm.savingsInvestmentsPoints;
+      case 'Debt':
+        return FinanceForm.debtPoints;
+      default:
+        return 0;
+    }
   }
 
   Widget _legendItem(Color color, String title) {
@@ -174,7 +216,7 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
 
     return Text(
       selectedGoalsList.where((goal) => goal != null).isNotEmpty
-          ? "Selected financial goals: ${selectedGoalsList.where((goal) => goal != null).join(', ')}"
+          ? "My Goals:\n${selectedGoalsList.where((goal) => goal != null).join(', ')}"
           : "You haven't set your financial goals yet",
       style: TextStyle(
         fontSize: 20,

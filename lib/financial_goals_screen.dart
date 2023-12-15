@@ -36,24 +36,36 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
           padding: EdgeInsets.all(20),
           child: Column(
             children: <Widget>[
-              SizedBox(height: 30,),
-              Text('What are your financial goals?', style: TextStyle(fontSize: 25),),
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                'What are your financial goals?',
+                style: TextStyle(fontSize: 25),
+              ),
               Divider(
                 thickness: 2,
                 color: Colors.green,
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Being Debt Free', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Being Debt Free',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[0],
                       onChanged: (value) {
                         setState(() {
@@ -62,16 +74,23 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Building an emergency fund', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Building an emergency fund',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[1],
                       onChanged: (value) {
                         setState(() {
@@ -82,18 +101,25 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Travelling more', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Travelling more',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[2],
                       onChanged: (value) {
                         setState(() {
@@ -102,16 +128,23 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Investing', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Investing',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[3],
                       onChanged: (value) {
                         setState(() {
@@ -122,18 +155,25 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Being more resourceful', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Being more resourceful',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[4],
                       onChanged: (value) {
                         setState(() {
@@ -142,16 +182,23 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Saving for retirement', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Saving for retirement',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[5],
                       onChanged: (value) {
                         setState(() {
@@ -162,18 +209,25 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Row(
                 children: [
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Buying a home', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Buying a home',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[6],
                       onChanged: (value) {
                         setState(() {
@@ -182,16 +236,23 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Container(
                     height: 60,
                     width: 150,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green,),
+                      border: Border.all(
+                        color: Colors.green,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: CheckboxListTile(
-                      title: Text('Budgeting better', style: TextStyle(fontSize: 13),),
+                      title: Text(
+                        'Budgeting better',
+                        style: TextStyle(fontSize: 13),
+                      ),
                       value: selectedGoals[7],
                       onChanged: (value) {
                         setState(() {
@@ -202,14 +263,17 @@ class _FinancialGoalsScreenState extends State<FinancialGoalsScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Financial Goals Updated!')),
                   );
                   widget.onGoalsUpdated(selectedGoals);
-                  Navigator.pop(context);
+                  Navigator.pop(
+                      context, selectedGoals); // Pass back the updated goals
                 },
                 child: Text('Submit'),
               ),
