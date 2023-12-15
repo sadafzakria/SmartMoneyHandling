@@ -1,15 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:smart_money_handling/classes/account.dart';
-import 'transaction_history.dart';
+import 'classes/account.dart';
 import 'classes/transaction.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'classes/user.dart';
+import 'classes/data.dart';
 
 class NewTransactionScreen extends StatefulWidget {
-  final User? user;
-  const NewTransactionScreen({super.key, required this.user});
+  const NewTransactionScreen({Key? key}) : super(key: key);
 
   @override
   State<NewTransactionScreen> createState() => _NewTransactionScreenState();
@@ -24,19 +20,10 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   var transactionTypes = [
     name(TransactionType.entertainment),
     name(TransactionType.subscriptions),
-    name(TransactionType.shopping),
-
-    name(TransactionType.savings),
-    name(TransactionType.emergency),
-    name(TransactionType.investment),
-
-    name(TransactionType.loans),
-    name(TransactionType.groceries),
-    name(TransactionType.utilities),
-    name(TransactionType.transportation),
+    // ... (other transaction types)
   ];
 
-  var userAccounts = []; //
+  var userAccounts = <String>[]; // Specify the type explicitly
   var accountTypes = [
     name(AccountType.checking),
     name(AccountType.savings),
@@ -45,75 +32,14 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
 
   @override
   void initState() {
-    userAccounts = getAccountNamesForUser(widget.user!.id) as List;
     super.initState();
   }
-  static String name(dynamic str)
-  {
-    if (str is TransactionType || str is AccountType)
+
+  static String name(dynamic str) {
+    if (str is TransactionType || str is AccountType) {
       return str.toString().split('.').last;
-
+    }
     return '';
-  }
-
-  static Future<List<String>> getAccountNamesForUser(String userId) async {
-    List<String> accountNames = [];
-
-    try {
-      CollectionReference accountsCollection = FirebaseFirestore.instance.collection('accounts');
-
-      QuerySnapshot querySnapshot = await accountsCollection.where('user_id', isEqualTo: userId).get();
-
-      // Iterate through the query snapshot and extract account names
-      querySnapshot.docs.forEach((DocumentSnapshot document) {
-        // Access the 'name' field of each document
-        var accountName = document['name'];
-        accountNames.add(accountName);
-      });
-
-    } catch (e) {
-      print('Error retrieving account names: $e');
-    }
-
-    return accountNames;
-  }
-
-  /*
-  Future<List<DocumentSnapshot>> getAccounts(String user_id) async {
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('account')
-          .where('user_id', isEqualTo: user_id)
-          .get();
-
-      return querySnapshot.docs;
-
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error checking username uniqueness: $e'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      return false;
-    }
-  }*/
-
-  Future<void> createTransaction(SingleTransaction transaction) async {
-    try {
-      final docUser = FirebaseFirestore.instance.collection('transaction').doc();
-      transaction.transaction_id = docUser.id;
-      final json = transaction.toJson();
-      await docUser.set(json);
-      //_formKey.currentState?.reset();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error creating transaction: $e'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
   }
 
   @override
@@ -161,19 +87,19 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                     width: 130,
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: DropdownButton(
-                        underline: Container(),
-                        dropdownColor: Colors.green,
-                        style: TextStyle(color: Colors.white),
-                        value: dropDownValueTransaction,
-                        items: transactionTypes.map((String item) {
-                          return DropdownMenuItem(
-                              value: item, child: Text(item));
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropDownValueTransaction = newValue!;
-                          });
-                        }),
+                      underline: Container(),
+                      dropdownColor: Colors.green,
+                      style: TextStyle(color: Colors.white),
+                      value: dropDownValueTransaction,
+                      items: transactionTypes.map((String item) {
+                        return DropdownMenuItem(value: item, child: Text(item));
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropDownValueTransaction = newValue!;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -196,7 +122,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                     color: Colors.white,
                     child: TextField(
                       keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
+                      TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
                             RegExp(r'(^-?\d*\.?\d*)'))
@@ -226,26 +152,26 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                     height: 40,
                     width: 120,
                     child: ElevatedButton(
-                        onPressed: () {
-                          showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime(2024),
-                          ).then((value) {
-                            setState(() {
-                              _chosenDate = value!;
-                            });
+                      onPressed: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime(2024),
+                        ).then((value) {
+                          setState(() {
+                            _chosenDate = value!;
                           });
-                        },
-                        child: Text('Pick Date...')),
+                        });
+                      },
+                      child: Text('Pick Date...'),
+                    ),
                   ),
                 ],
               ),
               SizedBox(
                 height: 20,
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -265,30 +191,43 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
                     width: 130,
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: DropdownButton(
-                        underline: Container(),
-                        dropdownColor: Colors.green,
-                        style: TextStyle(color: Colors.white),
-                        value: dropDownValueAccount, // TODO: CHANGE TO THE ACCOUNTS OWNED BY USER
-                        items: accountTypes.map((String item) {
-                          return DropdownMenuItem(
-                              value: item, child: Text(item));
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropDownValueAccount = newValue!;
-                          });
-                        }),
+                      underline: Container(),
+                      dropdownColor: Colors.green,
+                      style: TextStyle(color: Colors.white),
+                      value: dropDownValueAccount,
+                      items: accountTypes.map((String item) {
+                        return DropdownMenuItem(value: item, child: Text(item));
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropDownValueAccount = newValue!;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
               ElevatedButton(
-                  onPressed: () {
-                    // TODO: FETCH ACCOUNT AMOUNT AND EVALUATE IF THERES ENOUGH
+                onPressed: () async {
+                  // Retrieve information from the form
+                  String transactionCategory = dropDownValueTransaction;
+                  double transactionAmount = double.parse(_amountController.text);
+                  DateTime transactionDate = _chosenDate;
+                  String accountType = dropDownValueAccount;
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Transaction Registered!')));
-                  },
-                  child: Text('Save')),
+                  // Create a TransactionData object
+                  TransactionData newTransaction = TransactionData(
+                    category: transactionCategory,
+                    amount: transactionAmount,
+                    date: transactionDate,
+                    accountType: accountType,
+                  );
+
+                  // Send the new transaction data back to the previous screen
+                  Navigator.of(context).pop(newTransaction);
+                },
+                child: Text('Save'),
+              ),
             ],
           ),
         ),

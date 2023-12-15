@@ -71,7 +71,7 @@ class _NavBarState extends State<NavBar> {
               Tab(
                 icon: Icon(Icons.attach_money),
                 child: Text(
-                  'Accounts',
+                  'Account\nHistory',
                   style: TextStyle(fontSize: 10),
                   textAlign: TextAlign.center,
                 ),

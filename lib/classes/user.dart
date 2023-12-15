@@ -6,7 +6,7 @@ class User {
   final String lname;
   final String username;
   final String password;
-  String profileImageUrl; // Add this property
+  String profileImageUrl;
   List<FinancialGoal> goals;
 
   User({
@@ -15,7 +15,7 @@ class User {
     required this.lname,
     required this.username,
     required this.password,
-    required this.profileImageUrl, // Include this line
+    required this.profileImageUrl,
     List<FinancialGoal>? goals,
   }) : goals = goals ?? [];
 
@@ -25,7 +25,7 @@ class User {
     'lname': lname,
     'username': username,
     'password': password,
-    'profileImageUrl': profileImageUrl, // Include this line
+    'profileImageUrl': profileImageUrl,
   };
 
   static User fromJson(Map<String, dynamic> json) => User(
@@ -34,6 +34,6 @@ class User {
     lname: json['lname'],
     username: json['username'],
     password: json['password'],
-    profileImageUrl: json['profileImageUrl'], // Include this line
+    profileImageUrl: json['profileImageUrl'],
   );
 }

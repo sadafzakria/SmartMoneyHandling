@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/new_transaction_screen.dart';
-import 'package:smart_money_handling/report_and_analysis.dart';
-import 'package:smart_money_handling/transaction_history.dart';
-import 'package:smart_money_handling/transaction_report.dart';
+import 'classes/data.dart';
 
 class MyAccountsScreen extends StatefulWidget {
-  const MyAccountsScreen({super.key});
+  const MyAccountsScreen({Key? key}) : super(key: key);
 
   @override
   State<MyAccountsScreen> createState() => _MyAccountsScreenState();
 }
 
 class _MyAccountsScreenState extends State<MyAccountsScreen> {
+  List<TransactionData> transactions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -22,99 +19,80 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
         padding: EdgeInsets.all(20),
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30,),
-            Text('My Accounts', style: TextStyle(fontSize: 30),),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              'Transaction History',
+              style: TextStyle(fontSize: 30),
+            ),
             Divider(
               thickness: 2,
               color: Colors.green,
             ),
-            SizedBox(height: 20,),
-            Row(
-                children: [
-                  Text('Checkings', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                ]
+            SizedBox(
+              height: 20,
             ),
-            SizedBox(height: 12,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                    onPressed: () {
-                      //Navigator.of(context)
-                          //.push(MaterialPageRoute(builder: (context) => TransactionHistory(id: id)));
-                    },
-                    child: Text('View Transaction History')
-                ),
-                Container(
-                  height: 25,
-                  width: 65,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(7),
+            for (int index = 0; index < transactions.length; index++)
+              _buildTransactionDetails(transactions[index], index),
+            IconButton(
+              onPressed: () async {
+                TransactionData? result = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => NewTransactionScreen(),
                   ),
-                  child: Text('\$826',  style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
-                )
-              ],
-            ),
+                );
 
-            SizedBox(height: 20,),
-            Row(
-                children: [
-                  Text('Savings 1', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                ]
+                if (result != null) {
+                  setState(() {
+                    transactions.add(result);
+                  });
+                }
+              },
+              icon: Icon(Icons.add, size: 60, color: Colors.green),
             ),
-            SizedBox(height: 12,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                    onPressed: () {},
-                    child: Text('View Transaction History')
-                ),
-                Container(
-                  height: 25,
-                  width: 65,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Text('\$226',  style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
-                )
-              ],
-            ),
-
-            SizedBox(height: 20,),
-            Row(
-                children: [
-                  Text('Savings 2', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                ]
-            ),
-            SizedBox(height: 12,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                    onPressed: () {},
-                    child: Text('View Transaction History')
-                ),
-                Container(
-                  height: 25,
-                  width: 65,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Text('\$8226', style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
-                )
-              ],
-            ),
-            SizedBox(height: 60,),
-            IconButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewTransactionScreen(user: null,)));
-            }, icon: Icon(Icons.add, size: 60, color: Colors.green,))
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildTransactionDetails(TransactionData transaction, int index) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListTile(
+          leading: Icon(Icons.attach_money, size: 36, color: Colors.green),
+          title: Text(
+            transaction.accountType,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 8),
+              Text('Category: ${transaction.category}',
+                  style: TextStyle(fontSize: 16)),
+              Text('Amount: \$${transaction.amount}',
+                  style: TextStyle(fontSize: 16)),
+              Text('Date: ${transaction.date}',
+                  style: TextStyle(fontSize: 16)),
+            ],
+          ),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              _deleteTransaction(index);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _deleteTransaction(int index) {
+    setState(() {
+      transactions.removeAt(index);
+    });
   }
 }

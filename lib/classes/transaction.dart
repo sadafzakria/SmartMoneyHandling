@@ -1,5 +1,4 @@
-import 'goals.dart';
-
+//NOT USED
 class SingleTransaction {
   String transaction_id;
   final TransactionType type;
