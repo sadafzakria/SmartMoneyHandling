@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'classes/user.dart';
 import 'user_profile_screen.dart';
-import 'nav_menu.dart';
+import 'classes/user.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -22,6 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
   double totalAmount = 0.0;
   bool showTotalAmount = false;
 
+  // Callback function to update the profile image in HomeScreen
+  void updateProfileImage(String newProfileImage) {
+    setState(() {
+      widget.user.profileImageUrl = newProfileImage;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -30,11 +36,28 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             alignment: Alignment.topRight,
             child: IconButton(
-              icon: Icon(Icons.account_circle, size: 40),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UserProfileScreen(user: widget.user),
-                ));
+              icon: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage(widget.user.profileImageUrl),
+              ),
+              onPressed: () async {
+                // Open UserProfileScreen and wait for the result
+                final updatedProfileImage = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => UserProfileScreen(
+                      user: widget.user,
+                      onProfileImageUpdated: updateProfileImage,
+                    ),
+                  ),
+                );
+
+                // Check if the profile image was updated
+                if (updatedProfileImage != null && updatedProfileImage is String) {
+                  // Update the state with the new profile image
+                  setState(() {
+                    widget.user.profileImageUrl = updatedProfileImage;
+                  });
+                }
               },
             ),
           ),

@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'classes/user.dart';
 
 class NewTransactionScreen extends StatefulWidget {
-  final User user;
+  final User? user;
   const NewTransactionScreen({super.key, required this.user});
 
   @override
@@ -45,7 +45,7 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
 
   @override
   void initState() {
-    userAccounts = getAccountNamesForUser(widget.user.id);
+    userAccounts = getAccountNamesForUser(widget.user!.id) as List;
     super.initState();
   }
   static String name(dynamic str)

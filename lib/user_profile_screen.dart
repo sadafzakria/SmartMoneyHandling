@@ -6,15 +6,16 @@ import 'classes/user.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final User user;
+  final Function(String) onProfileImageUpdated;
 
-  const UserProfileScreen({Key? key, required this.user}) : super(key: key);
+  const UserProfileScreen({Key? key, required this.user, required this.onProfileImageUpdated})
+      : super(key: key);
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-
   late User user; // Define user property in the state
 
   @override
@@ -55,7 +56,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               // Open EditProfileScreen and wait for the result
               final updatedUser = await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => EditProfileScreen(user: user),
+                  builder: (context) => EditProfileScreen(
+                    user: user,
+                    profileImageUrl: '',
+                    onProfileImageUpdated: widget.onProfileImageUpdated,
+                  ),
                 ),
               );
 
@@ -76,10 +81,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              Icons.account_circle,
-              size: 175,
-              color: Colors.green[900],
+            CircleAvatar(
+              radius: 75,
+              backgroundImage: NetworkImage(user.profileImageUrl),
             ),
             SizedBox(height: 20),
             Text(
@@ -106,7 +110,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               onPressed: () async {
                 // Retrieve the user ID from the database based on the username
                 String? userId =
-                    await retrieveUserIdFromDatabase(user.username);
+                await retrieveUserIdFromDatabase(user.username);
 
                 // If the user ID is retrieved, proceed with deletion
                 if (userId != null) {

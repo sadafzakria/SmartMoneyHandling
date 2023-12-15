@@ -213,6 +213,8 @@ class _RegisterFormState extends State<RegisterForm> {
                     lname: lnameController.text,
                     username: username,
                     password: passwordController.text,
+                    profileImageUrl: '',
+
                   ),
                 );
 

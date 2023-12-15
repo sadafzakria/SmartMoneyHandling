@@ -110,7 +110,7 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
             ),
             SizedBox(height: 60,),
             IconButton(onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewTransactionScreen()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewTransactionScreen(user: null,)));
             }, icon: Icon(Icons.add, size: 60, color: Colors.green,))
           ],
         ),

@@ -101,6 +101,8 @@ class _LoginFormState extends State<LoginForm> {
           password: password,
           fname: userData['fname'] ?? '',
           lname: userData['lname'] ?? '',
+          profileImageUrl: '',
+
         );
       } else {
         return null; // User not found
