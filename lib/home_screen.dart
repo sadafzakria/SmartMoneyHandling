@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'user.dart';
+import 'classes/user.dart';
 import 'user_profile_screen.dart';
 import 'nav_menu.dart';
 
