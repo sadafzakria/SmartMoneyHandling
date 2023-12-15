@@ -39,7 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> fetchUnsplashImages() async {
     try {
       final response = await http.get(
-        Uri.parse('https://api.unsplash.com/photos/random?count=5'), // Change count as needed
+        Uri.parse('https://api.unsplash.com/photos/random?count=6'), // Change count as needed
         headers: {
           'Authorization': 'Client-ID asSMG9hodGERbXEUjY2P1kYDqp6Yb5HP0dweRFkVPiQ', // Replace with your Unsplash API key
         },
