@@ -12,7 +12,6 @@ class _SupportScreenState extends State<SupportScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Center(
         child: Column(
@@ -28,37 +27,37 @@ class _SupportScreenState extends State<SupportScreen> {
 
             SizedBox(height: 30,),
             Container(
-                height: 40,
-                width: 350,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.phone),
-                    Text('555-555-5555', style: TextStyle(fontSize: 20),),
-                    SizedBox(width: 10,),
-                  ],
-                )
+              height: 40,
+              width: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(Icons.phone),
+                  Text('555-555-5555', style: TextStyle(fontSize: 20),),
+                  SizedBox(width: 10,),
+                ],
+              ),
             ),
             SizedBox(height: 30,),
             Container(
-                height: 40,
-                width: 350,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(Icons.email),
-                    Text('inquiries@SMHmoney@com', style: TextStyle(fontSize: 20),),
-                    SizedBox(width: 10,),
-                  ],
-                )
+              height: 40,
+              width: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(Icons.email),
+                  Text('inquiries@SMHmoney@com', style: TextStyle(fontSize: 20),),
+                  SizedBox(width: 10,),
+                ],
+              ),
             ),
           ],
         ),

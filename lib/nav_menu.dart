@@ -3,7 +3,6 @@ import 'classes/user.dart';
 import 'package:smart_money_handling/home_screen.dart';
 import 'package:smart_money_handling/logout_screen.dart';
 import 'package:smart_money_handling/report_and_analysis.dart';
-import 'package:smart_money_handling/transaction_report.dart';
 import 'package:smart_money_handling/support_screen.dart';
 import 'package:smart_money_handling/accounts_screen.dart';
 
@@ -19,7 +18,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: Text("Smart Money Handling"),
@@ -44,7 +43,6 @@ class _NavBarState extends State<NavBar> {
               HomeScreen(user: widget.user),
               ReportAndAnalysis(),
               MyAccountsScreen(),
-              TransactionReport(),
               SupportScreen(),
             ],
           ),
@@ -72,14 +70,6 @@ class _NavBarState extends State<NavBar> {
                 icon: Icon(Icons.attach_money),
                 child: Text(
                   'Account\nHistory',
-                  style: TextStyle(fontSize: 10),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Tab(
-                icon: Icon(Icons.sticky_note_2_outlined),
-                child: Text(
-                  'Reports',
                   style: TextStyle(fontSize: 10),
                   textAlign: TextAlign.center,
                 ),

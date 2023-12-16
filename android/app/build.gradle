@@ -50,6 +50,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        resValue "string", "notification_channel_name", "Your Channel Name"
+        resValue "string", "notification_channel_description", "Your Channel Description"
     }
 
     buildTypes {

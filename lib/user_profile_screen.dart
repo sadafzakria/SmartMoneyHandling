@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart' as location_package;
+import 'package:geocoding/geocoding.dart';
 import 'edit_user_screen.dart';
 import 'login_screen.dart';
 import 'classes/user.dart';
@@ -8,20 +10,69 @@ class UserProfileScreen extends StatefulWidget {
   final User user;
   final Function(String) onProfileImageUpdated;
 
-  const UserProfileScreen({Key? key, required this.user, required this.onProfileImageUpdated})
-      : super(key: key);
+  const UserProfileScreen({
+    Key? key,
+    required this.user,
+    required this.onProfileImageUpdated,
+  }) : super(key: key);
 
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
 }
-
 class _UserProfileScreenState extends State<UserProfileScreen> {
   late User user; // Define user property in the state
+  location_package.Location location = location_package.Location();
+  String locationInfo = 'My Location:\nN/A';
+  bool isFetchingLocation = true;
 
   @override
   void initState() {
     super.initState();
-    user = widget.user; // Initialize user in the initState
+    user = widget.user;
+    initLocation();
+  }
+
+  Future<void> initLocation() async {
+    setState(() {
+      isFetchingLocation = true;
+    });
+
+    await location.requestPermission();
+
+    try {
+      location_package.LocationData currentLocation =
+      await location.getLocation();
+      reverseGeocode(
+          currentLocation.latitude ?? 0.0, currentLocation.longitude ?? 0.0);
+    } catch (e) {
+      print('Error getting current location: $e');
+    }
+
+    setState(() {
+      isFetchingLocation = false;
+    });
+
+    location.onLocationChanged.listen(
+          (location_package.LocationData currentLocation) {
+        reverseGeocode(
+            currentLocation.latitude ?? 0.0, currentLocation.longitude ?? 0.0);
+      },
+    );
+  }
+
+  Future<void> reverseGeocode(double latitude, double longitude) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+        setState(() {
+          locationInfo = 'My Location:\n${place.locality}, ${place.country}';
+        });
+      }
+    } catch (e) {
+      print('Error performing reverse geocoding: $e');
+    }
   }
 
   Future<String?> retrieveUserIdFromDatabase(String username) async {
@@ -106,11 +157,33 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             SizedBox(height: 30),
+            Container(
+              height: 40,
+              width: 350,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.pin_drop, color: Colors.green[900], size: 32),
+                    isFetchingLocation
+                        ? CircularProgressIndicator()
+                        : Flexible(
+                      child: Text(
+                        locationInfo,
+                        style: TextStyle(fontSize: 20),
+                        overflow: TextOverflow.visible, // Set overflow to visible
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
                 // Retrieve the user ID from the database based on the username
                 String? userId =
-                await retrieveUserIdFromDatabase(user.username);
+                    await retrieveUserIdFromDatabase(user.username);
 
                 // If the user ID is retrieved, proceed with deletion
                 if (userId != null) {
@@ -156,7 +229,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         // Navigate to the login screen after successful deletion
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
+                            builder: (context) => LoginScreen(),
+                          ),
                         );
                       } else {
                         print('User ID is empty or null');

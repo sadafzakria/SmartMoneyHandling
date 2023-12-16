@@ -29,17 +29,22 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   fl_chart: ^0.41.0 # For drawing PI charts
+  location: ^5.0.3
+  permission_handler: ^10.3.0
+  geocoding: ^2.0.1
+  flutter_local_notifications: ^16.2.0
   flutter:
     sdk: flutter
   http: ^0.13.3
 
 
 
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  firebase_core: ^2.24.2
-  cloud_firestore: ^4.13.5
+  firebase_core: ^2.10.0
+  cloud_firestore: ^4.13.6
 
 
 dev_dependencies:
