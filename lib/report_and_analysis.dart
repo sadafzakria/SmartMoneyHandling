@@ -18,94 +18,79 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
     return ListView(
       children: [
         SizedBox(height: 20),
-        AspectRatio(
-          aspectRatio: 1.3,
-          child: PieChart(
-            PieChartData(
-              sections: _generatePieChartSections(),
-              centerSpaceRadius: 40,
-            ),
-          ),
+        _buildPieChart(),
+        _buildLegendAndReportAnalysis(),
+        _buildElevatedButton(
+          text: 'Set Your Financial Goals',
+          onPressed: () => _navigateToFinancialGoalsScreen(),
         ),
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Legend",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  _legendItem(Colors.pinkAccent, 'Housing'),
-                  _legendItem(Colors.green, 'Living Expenses'),
-                  _legendItem(Colors.deepOrangeAccent, 'Transportation'),
-                  _legendItem(Colors.brown, 'Savings/Investments'),
-                  _legendItem(Colors.cyan, 'Debt'),
-                ],
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: _buildReportAnalysis(),
-                ),
-              ),
-            ],
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final result = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => FinancialGoalsScreen(
-                  initialSelectedGoals: selectedGoals,
-                  onGoalsUpdated: (updatedGoals) {
-                    setState(() {
-                      selectedGoals = updatedGoals;
-                    });
-                  },
-                ),
-              ),
-            );
-
-            if (result != null) {
-              // Handle the result if needed
-              print('Received updated goals: $result');
-            }
-          },
-          child: Text('Set Your Financial Goals'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green[900],
-            minimumSize: Size(50, 35),
-          ),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final result = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => FinanceForm(),
-              ),
-            );
-
-            if (result != null) {
-              // Handle the result if needed
-              print('Received result from FinanceForm: $result');
-              // Trigger a rebuild of the ReportAndAnalysis widget if needed
-              setState(() {});
-            }
-          },
-          child: Text('Explore Your Financial Mindset'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green[900],
-            minimumSize: Size(50, 35),
-          ),
+        _buildElevatedButton(
+          text: 'Explore Your Financial Mindset',
+          onPressed: () => _navigateToFinanceForm(),
         ),
       ],
+    );
+  }
+
+  Widget _buildPieChart() {
+    return AspectRatio(
+      aspectRatio: 1.3,
+      child: PieChart(
+        PieChartData(
+          sections: _generatePieChartSections(),
+          centerSpaceRadius: 40,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLegendAndReportAnalysis() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: Row(
+        children: [
+          _buildLegend(),
+          SizedBox(width: 16),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: _buildReportAnalysis(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLegend() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Legend",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        _legendItem(Colors.pinkAccent, 'Housing'),
+        _legendItem(Colors.green, 'Living Expenses'),
+        _legendItem(Colors.deepOrangeAccent, 'Transportation'),
+        _legendItem(Colors.brown, 'Savings/Investments'),
+        _legendItem(Colors.cyan, 'Debt'),
+      ],
+    );
+  }
+
+  Widget _buildElevatedButton(
+      {required String text, required VoidCallback onPressed}) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(text),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.green[900],
+        minimumSize: Size(50, 35),
+      ),
     );
   }
 
@@ -126,23 +111,6 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
       'Debt',
     ];
 
-    bool anyGoalSelected = selectedGoals.any((isSelected) => isSelected);
-
-    // Check if any goal is selected, if not, return an empty list
-    if (!anyGoalSelected) {
-      return [];
-    }
-
-    // Calculate the total points for the default case (no goals selected)
-    double totalDefaultPoints = 0.0;
-
-    for (int index = 0; index < goalTitles.length; index++) {
-      final isSelected = selectedGoals[index];
-      if (isSelected) {
-        totalDefaultPoints += getFinanceFormPoints(goalTitles[index]);
-      }
-    }
-
     List<PieChartSectionData> sections = [];
     for (int index = 0; index < goalTitles.length; index++) {
       final color = legendColors[index];
@@ -152,12 +120,13 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
       sections.add(PieChartSectionData(
         color: color,
         value: value,
-        title: '$value%',
+        title: '${value.toStringAsFixed(2)}%', // Round to two decimal digits
         radius: 100.0,
       ));
     }
     return sections;
   }
+
 
   // Helper function to get category points from FinanceForm
   double getFinanceFormPoints(String category) {
@@ -205,8 +174,7 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
       'Budgeting Better',
     ];
 
-    final selectedGoalsList =
-    List.generate(selectedGoals.length, (index) {
+    final selectedGoalsList = List.generate(selectedGoals.length, (index) {
       if (selectedGoals[index]) {
         return selectedGoalTitles[index];
       } else {
@@ -223,5 +191,40 @@ class _ReportAndAnalysisState extends State<ReportAndAnalysis> {
         color: Colors.black,
       ),
     );
+  }
+
+  void _navigateToFinancialGoalsScreen() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FinancialGoalsScreen(
+          initialSelectedGoals: selectedGoals,
+          onGoalsUpdated: (updatedGoals) {
+            setState(() {
+              selectedGoals = updatedGoals;
+            });
+          },
+        ),
+      ),
+    );
+
+    if (result != null) {
+      // Handle the result if needed
+      print('Received updated goals: $result');
+    }
+  }
+
+  void _navigateToFinanceForm() async {
+    final result = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => FinanceForm(),
+      ),
+    );
+
+    if (result != null) {
+      // Handle the result if needed
+      print('Received result from FinanceForm: $result');
+      // Trigger a rebuild of the ReportAndAnalysis widget if needed
+      setState(() {});
+    }
   }
 }

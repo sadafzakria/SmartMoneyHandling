@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+enum AnswerType {
+  stronglyAgree,
+  agree,
+  neither,
+  disagree,
+  stronglyDisagree,
+}
+
 class FinanceForm extends StatefulWidget {
   const FinanceForm({Key? key});
 
@@ -14,20 +22,18 @@ class FinanceForm extends StatefulWidget {
 }
 
 class _FinanceFormState extends State<FinanceForm> {
-  // Initial Selected Values for each question
-  List<String> dropdownValues = List.filled(15, 'Strongly Agree');
-
-  // Likert Scale
-  var items = [
-    'Strongly Agree', // 5 pts
-    'Agree', // 4 pts
-    'Neither', // 3 pts
-    'Disagree', // 2 pts
-    'Strongly Disagree', // 1pts
+  final List<String> categories = [
+    'Housing',
+    'Living Expenses',
+    'Transportation',
+    'Savings/Investments',
+    'Debt',
   ];
 
-  // Map questions to categories
-  var questions = {
+  List<String> dropdownValues =
+  List.filled(15, AnswerType.stronglyAgree.toString());
+
+  final Map<String, List<String>> questions = {
     'Housing': [
       'I prioritize owning a home as part of my long-term financial goals.',
       'Investing in real estate is important to me for building wealth.',
@@ -86,40 +92,7 @@ class _FinanceFormState extends State<FinanceForm> {
               children: List.generate(15, (index) {
                 String category = getCategoryForIndex(index);
                 String question = questions[category]![index % 3];
-                return Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(question, style: TextStyle(fontSize: 16)),
-                      ),
-                      Container(
-                        width: 170,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: DropdownButton<String>(
-                          value: dropdownValues[index],
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          items: items.map((String item) {
-                            return DropdownMenuItem(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              // Update selected value
-                              dropdownValues[index] = newValue!;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return buildQuestionWidget(index, question);
               }),
             ),
             ElevatedButton(
@@ -131,22 +104,11 @@ class _FinanceFormState extends State<FinanceForm> {
                 ),
               ),
               onPressed: () {
-                // Reset points before updating
                 resetPoints();
-
-                // Update category points based on user responses
                 updateCategoryPoints();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Financial Chart Updated!')),
-                );
-
-                // Normalize points to a scale of 0 to 100
-                double maxPossiblePoints = 60;
-                normalizePoints(maxPossiblePoints);
-
-                Navigator.pop(
-                    context, true); // Pass back a flag indicating success
+                showSnackBar();
+                normalizePoints();
+                Navigator.pop(context, true);
               },
             ),
           ],
@@ -155,7 +117,48 @@ class _FinanceFormState extends State<FinanceForm> {
     );
   }
 
-  // Reset points to zero
+  Widget buildQuestionWidget(int index, String question) {
+    return Container(
+      margin: EdgeInsets.all(10.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(question, style: TextStyle(fontSize: 16)),
+          ),
+          Container(
+            width: 170,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: DropdownButton<AnswerType>(
+              value: AnswerType.values.firstWhere(
+                    (type) => type.toString() == dropdownValues[index],
+              ),
+              icon: Icon(Icons.keyboard_arrow_down),
+              items: AnswerType.values.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(type.toString().split('.').last),
+                );
+              }).toList(),
+              onChanged: (AnswerType? newValue) {
+                setState(() {
+                  dropdownValues[index] = newValue!.toString();
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String getCategoryForIndex(int index) {
+    return categories[(index / 3).floor()];
+  }
+
   void resetPoints() {
     FinanceForm.housingPoints = 0;
     FinanceForm.livingExpensesPoints = 0;
@@ -164,7 +167,6 @@ class _FinanceFormState extends State<FinanceForm> {
     FinanceForm.debtPoints = 0;
   }
 
-  // Update category points based on the selected values
   void updateCategoryPoints() {
     for (int i = 0; i < 15; i++) {
       String category = getCategoryForIndex(i);
@@ -173,40 +175,23 @@ class _FinanceFormState extends State<FinanceForm> {
     }
   }
 
-  // Get category based on the question index
-  String getCategoryForIndex(int index) {
-    if (index < 3) {
-      return 'Housing';
-    } else if (index < 6) {
-      return 'Living Expenses';
-    } else if (index < 9) {
-      return 'Transportation';
-    } else if (index < 12) {
-      return 'Savings/Investments';
-    } else {
-      return 'Debt';
-    }
-  }
-
-  // Calculate points based on the selected answer
   double calculatePointsForAnswer(String answer) {
     switch (answer) {
-      case 'Strongly Agree':
+      case 'AnswerType.stronglyAgree':
         return 5;
-      case 'Agree':
+      case 'AnswerType.agree':
         return 4;
-      case 'Neither':
+      case 'AnswerType.neither':
         return 3;
-      case 'Disagree':
+      case 'AnswerType.disagree':
         return 2;
-      case 'Strongly Disagree':
+      case 'AnswerType.stronglyDisagree':
         return 1;
       default:
         return 0;
     }
   }
 
-  // Update points for each category
   void updatePointsForCategory(String category, double points) {
     switch (category) {
       case 'Housing':
@@ -227,16 +212,25 @@ class _FinanceFormState extends State<FinanceForm> {
     }
   }
 
-  // Normalize points to a scale of 0 to 100
-  void normalizePoints(double maxPossiblePoints) {
-    FinanceForm.housingPoints =
-        (FinanceForm.housingPoints / maxPossiblePoints) * 100;
-    FinanceForm.livingExpensesPoints =
-        (FinanceForm.livingExpensesPoints / maxPossiblePoints) * 100;
-    FinanceForm.transportationPoints =
-        (FinanceForm.transportationPoints / maxPossiblePoints) * 100;
-    FinanceForm.savingsInvestmentsPoints =
-        (FinanceForm.savingsInvestmentsPoints / maxPossiblePoints) * 100;
-    FinanceForm.debtPoints = (FinanceForm.debtPoints / maxPossiblePoints) * 100;
+  void normalizePoints() {
+    double totalPoints = FinanceForm.housingPoints +
+        FinanceForm.livingExpensesPoints +
+        FinanceForm.transportationPoints +
+        FinanceForm.savingsInvestmentsPoints +
+        FinanceForm.debtPoints;
+
+    if (totalPoints > 0) {
+      FinanceForm.housingPoints = (FinanceForm.housingPoints / totalPoints) * 100;
+      FinanceForm.livingExpensesPoints = (FinanceForm.livingExpensesPoints / totalPoints) * 100;
+      FinanceForm.transportationPoints = (FinanceForm.transportationPoints / totalPoints) * 100;
+      FinanceForm.savingsInvestmentsPoints = (FinanceForm.savingsInvestmentsPoints / totalPoints) * 100;
+      FinanceForm.debtPoints = (FinanceForm.debtPoints / totalPoints) * 100;
+    }
+  }
+
+  void showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Financial Chart Updated!')),
+    );
   }
 }
