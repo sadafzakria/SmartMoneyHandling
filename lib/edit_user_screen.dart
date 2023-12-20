@@ -25,6 +25,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController passwordController;
   bool _showPassword = false;
 
+  // Email validation regex
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+  );
+
+  // Password validation regex (adjust as needed)
+  final RegExp passwordRegex = RegExp(
+    r'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&]).{8,}$',
+  );
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   List<String> unsplashImages = [];
 
   @override
@@ -63,43 +75,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> updateUser() async {
     try {
-      String? userId = await retrieveUserIdFromDatabase(widget.user.username);
+      if (_formKey.currentState?.validate() ?? false) {
+        String? userId = await retrieveUserIdFromDatabase(widget.user.username);
 
-      if (userId != null) {
-        String newUsername = usernameController.text;
-        String newPassword = passwordController.text;
+        if (userId != null) {
+          String newUsername = usernameController.text;
+          String newPassword = passwordController.text;
 
-        await FirebaseFirestore.instance.collection('users').doc(userId).update({
-          'username': newUsername,
-          'password': newPassword,
-          'profileImageUrl': widget.profileImageUrl,
-        });
+          await FirebaseFirestore.instance.collection('users').doc(userId).update({
+            'username': newUsername,
+            'password': newPassword,
+            'profileImageUrl': widget.profileImageUrl,
+          });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Profile updated successfully!'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Profile updated successfully!'),
+              duration: Duration(seconds: 2),
+            ),
+          );
 
-        // Invoke the callback to notify the parent (UserProfileScreen)
-        widget.onProfileImageUpdated(widget.profileImageUrl);
+          // Invoke the callback to notify the parent (UserProfileScreen)
+          widget.onProfileImageUpdated(widget.profileImageUrl);
 
-        Navigator.of(context).pop(new User(
-          id: widget.user.id,
-          username: newUsername,
-          password: newPassword,
-          fname: widget.user.fname,
-          lname: widget.user.lname,
-          profileImageUrl: widget.profileImageUrl,
-        ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('User not found. Unable to update profile.'),
-            duration: Duration(seconds: 2),
-          ),
-        );
+          Navigator.of(context).pop(new User(
+            id: widget.user.id,
+            username: newUsername,
+            password: newPassword,
+            fname: widget.user.fname,
+            lname: widget.user.lname,
+            profileImageUrl: widget.profileImageUrl,
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('User not found. Unable to update profile.'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -140,87 +154,108 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       backgroundColor: Colors.lightGreen[100],
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 75,
-                backgroundImage: NetworkImage(widget.profileImageUrl),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Fetch Unsplash images when "Add Photo" button is pressed
-                  fetchUnsplashImages();
-                },
-                child: Text('Add Photo'),
-              ),
-              if (unsplashImages.isNotEmpty)
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: unsplashImages.map((imageUrl) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Set the selected image as the profile picture
-                        setState(() {
-                          widget.profileImageUrl = imageUrl;
-                        });
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 75,
+                  backgroundImage: NetworkImage(widget.profileImageUrl),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Fetch Unsplash images when "Add Photo" button is pressed
+                    fetchUnsplashImages();
+                  },
+                  child: Text('Add Photo'),
+                ),
+                if (unsplashImages.isNotEmpty)
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children: unsplashImages.map((imageUrl) {
+                      return GestureDetector(
+                        onTap: () {
+                          // Set the selected image as the profile picture
+                          setState(() {
+                            widget.profileImageUrl = imageUrl;
+                          });
 
-                        // Call the callback to update the profile image in the parent widget (HomeScreen)
-                        widget.onProfileImageUpdated(imageUrl);
-                      },
-                      child: Image.network(
-                        imageUrl,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextFormField(
-                  controller: usernameController,
-                  decoration: InputDecoration(labelText: 'Enter new Username'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter New Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _showPassword ? Icons.visibility : Icons.visibility_off,
-                        color: Colors.grey,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _showPassword = !_showPassword;
-                        });
-                      },
-                    ),
+                          // Call the callback to update the profile image in the parent widget (HomeScreen)
+                          widget.onProfileImageUpdated(imageUrl);
+                        },
+                        child: Image.network(
+                          imageUrl,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  obscureText: !_showPassword,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(labelText: 'Enter new Email'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your new email';
+                      }
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Invalid email format';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  updateUser();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[900],
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter New Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _showPassword ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                      ),
+                    ),
+                    obscureText: !_showPassword,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your new password';
+                      }
+                      if (!passwordRegex.hasMatch(value)) {
+                        return 'Password: 8 characters, including letters, numbers, and specials.';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-                child: Text(
-                  'Save',
-                  style: TextStyle(color: Colors.white),
+                SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () {
+                    updateUser();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[900],
+                  ),
+                  child: Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

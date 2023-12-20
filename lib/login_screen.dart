@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'classes/user.dart';
 import 'nav_menu.dart';
 import 'register_screen.dart';
+import 'reset_password.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key});
@@ -58,6 +59,21 @@ class LoginScreen extends StatelessWidget {
                 },
                 child: Text(
                   "Don't have an Account? Register Now",
+                  style: TextStyle(
+                    color: Colors.blue, // Make the text clickable with a blue color
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextButton(
+                onPressed: () {
+                  // Navigate to the RegisterScreen when "Register Now" is clicked.
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResetPasswordScreen()));
+                },
+                child: Text(
+                  "Forgot Password?",
                   style: TextStyle(
                     color: Colors.blue, // Make the text clickable with a blue color
                   ),

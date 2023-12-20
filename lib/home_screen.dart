@@ -21,11 +21,37 @@ class _HomeScreenState extends State<HomeScreen> {
   double totalAmount = 0.0;
   bool showTotalAmount = false;
 
+  // Controllers for the TextFields
+  List<TextEditingController> typeControllers = [];
+  List<TextEditingController> amountControllers = [];
+
   // Callback function to update the profile image in HomeScreen
   void updateProfileImage(String newProfileImage) {
     setState(() {
       widget.user.profileImageUrl = newProfileImage;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers
+    for (int i = 0; i < expenses.length; i++) {
+      typeControllers.add(TextEditingController(text: expenses[i].type));
+      amountControllers.add(TextEditingController(text: expenses[i].amount));
+    }
+  }
+
+  @override
+  void dispose() {
+    // Dispose controllers to avoid memory leaks
+    for (var controller in typeControllers) {
+      controller.dispose();
+    }
+    for (var controller in amountControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -74,17 +100,17 @@ class _HomeScreenState extends State<HomeScreen> {
               DataColumn(label: Text("Type")),
               DataColumn(label: Text("Amount")),
             ],
-            rows: expenses
-                .map(
-                  (expense) => DataRow(
+            rows: List.generate(
+              expenses.length,
+                  (index) => DataRow(
                 cells: <DataCell>[
                   DataCell(
                     TextField(
                       decoration: InputDecoration(hintText: "Expense Type"),
-                      controller: TextEditingController(text: expense.type),
+                      controller: typeControllers[index],
                       onChanged: (value) {
                         setState(() {
-                          expense.type = value;
+                          expenses[index].type = value;
                         });
                       },
                     ),
@@ -92,18 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   DataCell(
                     TextField(
                       decoration: InputDecoration(hintText: "Amount"),
-                      controller: TextEditingController(text: expense.amount),
+                      controller: amountControllers[index],
                       onChanged: (value) {
                         setState(() {
-                          expense.amount = value;
+                          expenses[index].amount = value;
                         });
                       },
                     ),
                   ),
                 ],
               ),
-            )
-                .toList(),
+            ),
           ),
           SizedBox(height: 10),
           ElevatedButton(
@@ -111,6 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 // Add a new expense row
                 expenses.add(Expense("", ""));
+                // Initialize controller for the new row
+                typeControllers.add(TextEditingController());
+                amountControllers.add(TextEditingController());
                 showTotalAmount = false; // Reset the flag when adding a new expense
               });
             },

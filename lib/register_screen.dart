@@ -64,7 +64,6 @@ class RegisterForm extends StatefulWidget {
   @override
   _RegisterFormState createState() => _RegisterFormState();
 }
-
 class _RegisterFormState extends State<RegisterForm> {
   final fnameController = TextEditingController();
   final lnameController = TextEditingController();
@@ -76,6 +75,19 @@ class _RegisterFormState extends State<RegisterForm> {
 
   // Toggle for showing/hiding the password
   bool _showPassword = false;
+
+  // Email validation regex
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
+  );
+
+  // Password validation regex (adjust as needed)
+  final RegExp passwordRegex = RegExp(
+    r'^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&]).{8,}$',
+  );
+
+  // Regex for first name and last name (only alphabet letters)
+  final RegExp nameRegex = RegExp(r'^[a-zA-Z]+$');
 
   Future<bool> isUsernameUnique(String username) async {
     try {
@@ -125,6 +137,8 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter your first name';
+              } else if (!nameRegex.hasMatch(value)) {
+                return 'Only alphabet letters are allowed for the first name';
               }
               return null;
             },
@@ -135,6 +149,8 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter your last name';
+              } else if (!nameRegex.hasMatch(value)) {
+                return 'Only alphabet letters are allowed for the last name';
               }
               return null;
             },
@@ -145,6 +161,8 @@ class _RegisterFormState extends State<RegisterForm> {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter a username';
+              } else if (!emailRegex.hasMatch(value)) {
+                return 'Please enter a valid email address';
               }
               return null;
             },
@@ -158,9 +176,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: '*Password',
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _showPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        _showPassword ? Icons.visibility : Icons.visibility_off,
                         color: Colors.grey,
                       ),
                       onPressed: () {
@@ -174,6 +190,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a password';
+                    } else if (!passwordRegex.hasMatch(value)) {
+                      return 'Password: 8 characters, including letters, numbers, and specials.';
                     }
                     return null;
                   },
@@ -214,7 +232,6 @@ class _RegisterFormState extends State<RegisterForm> {
                     username: username,
                     password: passwordController.text,
                     profileImageUrl: '',
-
                   ),
                 );
 
@@ -242,4 +259,3 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 }
-
