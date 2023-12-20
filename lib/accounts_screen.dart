@@ -21,8 +21,8 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
         channelKey: 'basic_channel',
         title: 'Smart Money Handling',
         body: 'Careful! You are spending an insane amount!',
-        bigPicture: 'asset://assets/images/ic_launcher.png',
-        notificationLayout: NotificationLayout.BigPicture,
+        //bigPicture: 'asset://assets/images/smh.png',
+        //notificationLayout: NotificationLayout.BigPicture,
       ),
     );
   }
