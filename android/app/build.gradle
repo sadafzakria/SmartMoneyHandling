@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.smart_money_handling"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -45,13 +45,13 @@ android {
         applicationId "com.example.smart_money_handling"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-        resValue "string", "notification_channel_name", "Your Channel Name"
-        resValue "string", "notification_channel_description", "Your Channel Description"
+        //resValue "string", "notification_channel_name", "Your Channel Name"
+        //resValue "string", "notification_channel_description", "Your Channel Description"
     }
 
     buildTypes {
@@ -69,6 +69,8 @@ flutter {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
+    //implementation 'com.google.firebase:firebase-core:22.0.0'  // Use the latest version
+    //implementation 'com.google.firebase:firebase-messaging:24.0.0'  // Use the latest version
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'classes/account.dart';
 import 'classes/transaction.dart';
 import 'classes/data.dart';
-import 'classes/notification_service.dart';
+
+
 
 class NewTransactionScreen extends StatefulWidget {
   const NewTransactionScreen({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class NewTransactionScreen extends StatefulWidget {
 }
 
 class _NewTransactionScreenState extends State<NewTransactionScreen> {
-  late NotificationService notificationService; // Declare NotificationService
   TextEditingController _amountController = TextEditingController();
   DateTime _chosenDate = DateTime.now();
   String dropDownValueTransaction = name(TransactionType.entertainment);
@@ -50,12 +50,8 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
   @override
   void initState() {
     super.initState();
-    notificationService = NotificationService(); // Initialize NotificationService
   }
 
-  Future<void> _showNotification(String title, String body) async {
-    await notificationService.showNotification(title, body); // Use NotificationService method
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -232,13 +228,5 @@ class _NewTransactionScreenState extends State<NewTransactionScreen> {
 
     // Send the new transaction data back to the previous screen
     Navigator.of(context).pop(newTransaction);
-
-    // Check if the transaction amount is over 500
-    if (transactionAmount > 500) {
-      // Show a notification alert
-      print('Transaction amount exceeds budget!'); // DEBUG
-      await _showNotification('Alert', 'Transaction amount exceeds budget!');
-    }
-
   }
 }

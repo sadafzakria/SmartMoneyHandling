@@ -45,6 +45,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.10.0
   cloud_firestore: ^4.13.6
+  awesome_notifications: ^0.8.3
 
 
 dev_dependencies:
@@ -70,6 +71,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/smh.png
+    - assets/images/ic_launcher.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

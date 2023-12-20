@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:smart_money_handling/new_transaction_screen.dart';
 import 'classes/data.dart';
-import 'classes/notification_service.dart';
+
 
 class MyAccountsScreen extends StatefulWidget {
   const MyAccountsScreen({Key? key}) : super(key: key);
@@ -11,8 +12,20 @@ class MyAccountsScreen extends StatefulWidget {
 }
 
 class _MyAccountsScreenState extends State<MyAccountsScreen> {
-  final NotificationService notificationService = NotificationService();
   List<TransactionData> transactions = [];
+
+  triggerNotification(){
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 10,
+        channelKey: 'basic_channel',
+        title: 'Smart Money Handling',
+        body: 'Careful! You are spending an insane amount!',
+        bigPicture: 'asset://assets/images/ic_launcher.png',
+        notificationLayout: NotificationLayout.BigPicture,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +61,10 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
                 if (result != null) {
                   _checkBudgetExceeded(result.amount);
 
-                  // Only add the transaction if the amount is not exceeding 200
-                  if (result.amount <= 200) {
                     setState(() {
                       transactions.add(result);
                     });
-                  }
+
                 }
               },
               icon: Icon(Icons.add, size: 60, color: Colors.green),
@@ -115,11 +126,8 @@ class _MyAccountsScreenState extends State<MyAccountsScreen> {
   }
 
   void _checkBudgetExceeded(double amount) {
-    if (amount > 200) {
-      notificationService.showNotification(
-        'Budget Exceeded',
-        'Transaction amount exceeds \$200!',
-      );
+    if (amount > 500) {
+      triggerNotification();
     }
   }
 }
